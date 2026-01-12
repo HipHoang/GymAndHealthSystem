@@ -1,0 +1,71 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trò chuyện</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+    <style>
+        .chat-box {
+            max-height: 500px;
+            overflow-y: scroll;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+        }
+
+        .message-left {
+            text-align: left;
+        }
+
+        .message-right {
+            text-align: right;
+        }
+
+        .message {
+            margin: 8px 0;
+            padding: 8px 12px;
+            display: inline-block;
+            border-radius: 15px;
+            max-width: 70%;
+        }
+
+        .sent {
+            background-color: #dcf8c6;
+        }
+
+        .received {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container">
+        <h2 class="text-center mt-4">Trò chuyện với Huấn luyện viên</h2>
+
+        <div class="chat-box mb-4" id="chatBox">
+            <div th:each="m : ${messages}">
+                <div th:if="${m.senderId.id == currentUserId}" class="message-right">
+                    <div class="message sent" th:text="${m.message}"></div>
+                </div>
+                <div th:if="${m.senderId.id != currentUserId}" class="message-left">
+                    <div class="message received" th:text="${m.message}"></div>
+                </div>
+            </div>
+        </div>
+
+        <form th:action="@{/chat/send}" method="post" class="row g-2">
+            <input type="hidden" name="receiverId" th:value="${receiverId}" />
+            <div class="col-10">
+                <input type="text" name="message" class="form-control" placeholder="Nhập tin nhắn..." required />
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary w-100">Gửi</button>
+            </div>
+        </form>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>
+

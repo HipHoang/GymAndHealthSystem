@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thêm Tiến độ Tập luyện</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container">
+        <div class="card p-4 shadow-sm">
+            <h2 class="text-center mb-4">Thêm/Cập nhật Tiến độ Tập luyện</h2>
+
+            <div th:if="${error}" class="alert alert-danger text-center">
+                <p th:text="${error}"></p>
+            </div>
+
+            <form th:action="@{/training-progress/add}" th:object="${trainingProgress}" method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                <!-- Member -->
+                <div class="mb-3">
+                    <label for="memberId" class="form-label">Hội viên</label>
+                    <select th:field="*{memberId.id}" class="form-select" required>
+                        <option th:each="u : ${members}"
+                                th:value="${u.id}"
+                                th:text="${u.fullName + ' (' + u.username + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- PT -->
+                <div class="mb-3">
+                    <label for="ptId" class="form-label">Huấn luyện viên</label>
+                    <select th:field="*{ptId.id}" class="form-select" required>
+                        <option th:each="pt : ${trainers}"
+                                th:value="${pt.id}"
+                                th:text="${pt.fullName + ' (' + pt.username + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Date -->
+                <div class="mb-3">
+                    <label class="form-label">Ngày tập</label>
+                    <input type="date" th:field="*{date}" class="form-control" required />
+                </div>
+
+                <!-- Tiến độ -->
+                <div class="mb-3">
+                    <label class="form-label">Tiến độ đạt được</label>
+                    <textarea th:field="*{progressDetail}" class="form-control" rows="4" required></textarea>
+                </div>
+
+                <!-- Submit -->
+                <div>
+                    <button class="btn btn-success w-100 mt-2" type="submit">
+                        <span th:if="${trainingProgress.id == null}">Thêm tiến độ</span>
+                        <span th:unless="${trainingProgress.id == null}">Cập nhật tiến độ</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>
+

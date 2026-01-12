@@ -1,0 +1,73 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thêm Gói Tập Người Dùng</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+<div th:replace="base :: header"></div>
+
+<main class="container">
+    <div class="card p-4 shadow-sm">
+        <h2 class="text-center mb-3" th:text="${userPackage.id != null ? 'Cập nhật Gói Tập' : 'Thêm Gói Tập'}"></h2>
+
+        <div th:if="${error}" class="alert alert-danger text-center">
+            <p th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/user-packages/save}" th:object="${userPackage}" method="post">
+            <input type="hidden" th:field="*{id}" />
+
+            <!-- Chọn User -->
+            <div class="mb-3">
+                <label class="form-label">Người dùng</label>
+                <select th:field="*{userId.id}" class="form-select" required>
+                    <option th:each="u : ${users}" th:value="${u.id}"
+                            th:text="${u.fullName + ' (' + u.username + ')'}"></option>
+                </select>
+            </div>
+
+            <!-- Chọn Gói tập -->
+            <div class="mb-3">
+                <label class="form-label">Gói tập</label>
+                <select th:field="*{packageId.id}" class="form-select" required>
+                    <option th:each="p : ${packages}" th:value="${p.id}" th:text="${p.name}"></option>
+                </select>
+            </div>
+
+            <!-- Ngày bắt đầu -->
+            <div class="mb-3">
+                <label class="form-label">Ngày bắt đầu</label>
+                <input type="date" th:field="*{startDate}" class="form-control" required />
+            </div>
+
+            <!-- Ngày kết thúc -->
+            <div class="mb-3">
+                <label class="form-label">Ngày kết thúc</label>
+                <input type="date" th:field="*{endDate}" class="form-control" required />
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="mb-3">
+                <label class="form-label">Trạng thái</label>
+                <select th:field="*{status}" class="form-select">
+                    <option value="active">Đang hoạt động</option>
+                    <option value="expired">Hết hạn</option>
+                    <option value="pending">Chờ kích hoạt</option>
+                </select>
+            </div>
+
+            <!-- Nút submit -->
+            <div>
+                <button class="btn btn-success w-100" type="submit"
+                        th:text="${userPackage.id != null ? 'Cập nhật' : 'Thêm mới'}">
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<div th:replace="base :: footer"></div>
+</body>
+</html>
+

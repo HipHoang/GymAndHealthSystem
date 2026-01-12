@@ -1,0 +1,20 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.hmh.services;
+
+import com.hmh.pojo.HealthProfile;
+import java.util.List;
+import java.util.Map;
+/**
+ *
+ * @author hieph
+ */
+public interface HealthProfileService {
+    List<HealthProfile> getHealthProfiles(Map<String, String> params);
+    HealthProfile getHealthProfileById(int id);
+    HealthProfile saveHealthProfile(HealthProfile healthProfile);
+    boolean deleteHealthProfile(int id);
+    HealthProfile getHealthProfileByUserId(int userId);
+}

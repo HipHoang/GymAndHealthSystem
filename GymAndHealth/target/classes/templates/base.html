@@ -1,0 +1,95 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Trang chủ</title>
+    <th:block th:fragment="bootstrap">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    </th:block>
+</head>
+<body>
+    <!-- Header -->
+    <header th:fragment="header">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/}">🏋️Gym Health Admin</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/}">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/users}">Quản lý Người dùng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/training-packages}">Gói tập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/user-packages}">Gói đã mua</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/booking-schedules}">Đặt lịch tập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/training-progress}">Theo dõi tập luyện</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/feedbacks}">Feedback</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/payment-transactions}">Thanh toán</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/statistics}">Thống kê</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Footer -->
+    <footer th:fragment="footer" class="bg-dark text-white pt-4 pb-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <!-- About -->
+                <div class="col-md-4">
+                    <h5>Về chúng tôi</h5>
+                    <p>Hệ thống hỗ trợ quản lý phòng gym, theo dõi sức khỏe và tiến trình tập luyện toàn diện.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-md-4">
+                    <h5>Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Trang chủ</a></li>
+                        <li><a href="#" class="text-white">Gói tập</a></li>
+                        <li><a href="#" class="text-white">Đặt lịch</a></li>
+                        <li><a href="#" class="text-white">Tiến trình</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-md-4">
+                    <h5>Liên hệ</h5>
+                    <p>Email: support@gymtracker.vn</p>
+                    <p>Hotline: 0123 456 789</p>
+                    <p>Địa chỉ: 123 Nha Be Road, TP.HCM</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p>&copy; 2025 HMH. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

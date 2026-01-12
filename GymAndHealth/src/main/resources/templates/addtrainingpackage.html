@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thêm/Cập nhật Gói Tập</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+<div th:replace="base :: header"></div>
+
+<main class="container">
+    <div class="card p-4 shadow-sm mt-3">
+        <h2 class="text-center mb-4">
+            <span th:if="${trainingPackage.id == null}">Thêm Gói Tập</span>
+            <span th:unless="${trainingPackage.id == null}">Cập nhật Gói Tập</span>
+        </h2>
+
+        <div th:if="${error}" class="alert alert-danger text-center">
+            <p th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/training-packages/add}" th:object="${trainingPackage}" method="post">
+            <input type="hidden" th:field="*{id}" />
+
+            <!-- Tên gói -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Tên gói</label>
+                <input type="text" th:field="*{name}" class="form-control" required />
+            </div>
+
+            <!-- Giá -->
+            <div class="mb-3">
+                <label for="price" class="form-label">Giá (VNĐ)</label>
+                <input type="number" step="1000" th:field="*{price}" class="form-control" required />
+            </div>
+
+            <!-- Thời hạn -->
+            <div class="mb-3">
+                <label for="duration" class="form-label">Thời hạn (ngày)</label>
+                <input type="number" th:field="*{duration}" class="form-control" required />
+            </div>
+
+            <!-- Mô tả -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Mô tả</label>
+                <textarea th:field="*{description}" class="form-control" rows="4"></textarea>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="mb-3">
+                <label for="active" class="form-label">Trạng thái</label>
+                <select th:field="*{active}" class="form-select">
+                    <option th:value="true" th:text="'Đang bán'"></option>
+                    <option th:value="false" th:text="'Ngưng bán'"></option>
+                </select>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary mt-2" type="submit">
+                    <span th:if="${trainingPackage.id == null}">Thêm Gói Tập</span>
+                    <span th:unless="${trainingPackage.id == null}">Cập nhật Gói Tập</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<div th:replace="base :: footer"></div>
+</body>
+</html>

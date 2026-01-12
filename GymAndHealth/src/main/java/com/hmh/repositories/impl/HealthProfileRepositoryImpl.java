@@ -1,0 +1,144 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.hmh.repositories.impl;
+
+import com.hmh.pojo.HealthProfile;
+import com.hmh.pojo.User;
+import com.hmh.repositories.HealthProfileRepository;
+import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author hieph
+ */
+@Repository
+@Transactional
+public class HealthProfileRepositoryImpl implements HealthProfileRepository {
+
+    private static final int PAGE_SIZE = 6;
+
+    @Autowired
+    private LocalSessionFactoryBean factory;
+
+    @Override
+    public List<HealthProfile> getHealthProfiles(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<HealthProfile> q = b.createQuery(HealthProfile.class);
+        Root<HealthProfile> root = q.from(HealthProfile.class);
+        Join<HealthProfile, User> userJoin = root.join("userId", JoinType.INNER);
+        q.select(root);
+
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            String kw = params.get("kw");
+            if (kw != null && !kw.isEmpty()) {
+                predicates.add(b.like(root.get("target"), String.format("%%%s%%", kw)));
+            }
+
+            String minBmi = params.get("minBmi");
+            if (minBmi != null && !minBmi.isEmpty()) {
+                predicates.add(b.greaterThanOrEqualTo(root.get("bmi"), Float.valueOf(minBmi)));
+            }
+
+            String maxBmi = params.get("maxBmi");
+            if (maxBmi != null && !maxBmi.isEmpty()) {
+                predicates.add(b.lessThanOrEqualTo(root.get("bmi"), Float.valueOf(maxBmi)));
+            }
+
+            String username = params.get("username");
+            if (username != null && !username.isEmpty()) {
+                predicates.add(b.like(userJoin.get("username"), String.format("%%%s%%", username)));
+            }
+
+            q.where(predicates.toArray(Predicate[]::new));
+
+            String orderBy = params.get("orderBy");
+            if (orderBy != null && !orderBy.isEmpty()) {
+                q.orderBy(b.asc(root.get(orderBy)));
+            }
+        }
+
+        Query query = s.createQuery(q);
+
+        if (params != null && params.containsKey("page")) {
+            int page = Integer.parseInt(params.get("page"));
+            int start = (page - 1) * PAGE_SIZE;
+
+            query.setMaxResults(PAGE_SIZE);
+            query.setFirstResult(start);
+        }
+
+        return query.getResultList();
+    }
+
+    @Override
+    public HealthProfile getHealthProfileByUserId(int userId) {
+        Session session = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<HealthProfile> cq = cb.createQuery(HealthProfile.class);
+        Root<HealthProfile> root = cq.from(HealthProfile.class);
+
+        Join<HealthProfile, User> userJoin = root.join("userId", JoinType.INNER);
+
+        cq.select(root).where(cb.equal(userJoin.get("id"), userId));
+
+        org.hibernate.query.Query<HealthProfile> query = session.createQuery(cq);
+        return query.uniqueResult();
+    }
+
+    @Override
+    public HealthProfile getHealthProfileById(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        return s.get(HealthProfile.class, id);
+    }
+
+    @Override
+    public HealthProfile addOrUpdateHealthProfile(HealthProfile healthProfile) {
+        Session s = this.factory.getObject().getCurrentSession();
+
+        if (healthProfile.getId() == null) {
+            HealthProfile existing = (HealthProfile) s.createQuery("FROM HealthProfile WHERE userId = :user")
+                    .setParameter("user", healthProfile.getUserId())
+                    .uniqueResult();
+
+            if (existing != null) {
+                throw new RuntimeException("Người dùng này đã có hồ sơ sức khỏe!");
+            }
+
+            s.persist(healthProfile);
+        } else {
+            s.merge(healthProfile);
+        }
+
+        s.refresh(healthProfile);
+        return healthProfile;
+    }
+
+    @Override
+    public void deleteHealthProfile(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        HealthProfile hp = this.getHealthProfileById(id);
+        if (hp != null) {
+            s.evict(hp.getUserId());
+            s.remove(hp);
+        }
+    }
+}

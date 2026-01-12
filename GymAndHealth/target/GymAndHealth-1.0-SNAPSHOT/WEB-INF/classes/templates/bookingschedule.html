@@ -1,0 +1,84 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách lịch tập</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+<div th:replace="base :: header"></div>
+
+<main class="container">
+    <h1 class="text-center mt-3">Danh sách lịch tập luyện</h1>
+
+    <form th:action="@{/booking-schedule}" method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <select class="form-select" name="ptId">
+                <option value="">-- Lọc theo PT --</option>
+                <option th:each="pt : ${trainers}" th:value="${pt.id}" th:text="${pt.fullName}"></option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <select class="form-select" name="memberId">
+                <option value="">-- Lọc theo hội viên --</option>
+                <option th:each="mem : ${members}" th:value="${mem.id}" th:text="${mem.fullName}"></option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select class="form-select" name="status">
+                <option value="">-- Trạng thái --</option>
+                <option value="CHỜ XÁC NHẬN">Chờ xác nhận</option>
+                <option value="ĐÃ XÁC NHẬN">Đã xác nhận</option>
+                <option value="ĐÃ HỦY">Đã hủy</option>
+            </select>
+        </div>
+
+        <div class="col-md-1 d-grid">
+            <button type="submit" class="btn btn-info">Lọc</button>
+        </div>
+    </form>
+
+    <a th:href="@{/booking-schedule-add-view}" class="btn btn-success mb-3">Tạo lịch mới</a>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Hội viên</th>
+                    <th>Huấn luyện viên</th>
+                    <th>Thời gian</th>
+                    <th>Loại</th>
+                    <th>Trạng thái</th>
+                    <th>Ghi chú</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="b : ${bookingSchedules}">
+                    <td th:text="${b.id}"></td>
+                    <td th:text="${b.memberId.fullName}"></td>
+                    <td th:text="${b.ptId.fullName}"></td>
+                    <td th:text="${#dates.format(b.scheduleTime, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${b.type}"></td>
+                    <td th:text="${b.status}"></td>
+                    <td th:text="${b.note}"></td>
+                    <td>
+                        <a th:href="@{'/booking-schedule/edit/' + ${b.id}}" class="btn btn-warning btn-sm">Sửa</a>
+                        <button class="btn btn-danger btn-sm"
+                                th:onclick="'deleteBookingSchedule(\'' + @{/api/booking-schedule/} + '\',' + ${b.id} + ')';">
+                            &times;
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div th:replace="base :: footer"></div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

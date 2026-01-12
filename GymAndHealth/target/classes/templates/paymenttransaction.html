@@ -1,0 +1,64 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách Giao dịch Thanh toán</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container">
+        <h1 class="text-center mt-3 mb-4">Giao dịch Thanh toán</h1>
+
+        <form th:action="@{/payment-transactions}" method="get">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="userId" placeholder="ID người dùng">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="packageId" placeholder="ID gói tập">
+                </div>
+                <div class="col-md-3">
+                    <input type="date" class="form-control" name="fromDate" placeholder="Từ ngày">
+                </div>
+                <div class="col-md-3">
+                    <input type="date" class="form-control" name="toDate" placeholder="Đến ngày">
+                </div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-info" type="submit">Lọc kết quả</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Người dùng</th>
+                        <th>Gói tập</th>
+                        <th>Số tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr th:each="t : ${transactions}">
+                        <td th:text="${t.id}"></td>
+                        <td th:text="${t.userId.fullName + ' (' + t.userId.username + ')'}"></td>
+                        <td th:text="${t.packageId.name}"></td>
+                        <td th:text="${#numbers.formatDecimal(t.amount, 1, 'COMMA', 2, 'POINT') + ' VNĐ'}"></td>
+                        <td>
+                            <span th:text="${t.status}" th:classappend="${t.status == 'success'} ? 'text-success' : 'text-danger'"></span>
+                        </td>
+                        <td th:text="${#dates.format(t.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>
+

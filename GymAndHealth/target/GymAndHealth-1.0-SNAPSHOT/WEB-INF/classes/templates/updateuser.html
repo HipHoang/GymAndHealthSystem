@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cập nhật người dùng</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container mt-4">
+        <div class="card shadow p-4">
+            <h2 class="text-center mb-3">Cập nhật thông tin người dùng</h2>
+
+            <div th:if="${error}" class="alert alert-danger text-center">
+                <p th:text="${error}"></p>
+            </div>
+
+            <form th:action="@{'/users/update/' + ${user.id}}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:value="${user.id}" />
+
+                <!-- Username -->
+                <div class="mb-3">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <input type="text" name="user_name" th:value="${user.username}" class="form-control" required />
+                </div>
+
+                <!-- First Name -->
+                <div class="mb-3">
+                    <label class="form-label">Họ</label>
+                    <input type="text" name="first_name" th:value="${user.firstName}" class="form-control" required />
+                </div>
+
+                <!-- Last Name -->
+                <div class="mb-3">
+                    <label class="form-label">Tên</label>
+                    <input type="text" name="last_name" th:value="${user.lastName}" class="form-control" required />
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" th:value="${user.email}" class="form-control" required />
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-3">
+                    <label class="form-label">Số điện thoại</label>
+                    <input type="text" name="phone" th:value="${user.phone}" class="form-control" required />
+                </div>
+
+                <!-- Gender -->
+                <div class="mb-3">
+                    <label class="form-label">Giới tính</label>
+                    <select name="gender" class="form-select">
+                        <option value="MALE" th:selected="${user.gender == 'MALE'}">Nam</option>
+                        <option value="FEMALE" th:selected="${user.gender == 'FEMALE'}">Nữ</option>
+                        <option value="OTHER" th:selected="${user.gender == 'OTHER'}">Khác</option>
+                    </select>
+                </div>
+
+                <!-- User Role -->
+                <div class="mb-3">
+                    <label class="form-label">Vai trò</label>
+                    <select name="user_role" class="form-select">
+                        <option value="ROLE_USER" th:selected="${user.userRole == 'ROLE_USER'}">Người dùng</option>
+                        <option value="ROLE_TRAINER" th:selected="${user.userRole == 'ROLE_TRAINER'}">Huấn luyện viên</option>
+                        <option value="ROLE_ADMIN" th:selected="${user.userRole == 'ROLE_ADMIN'}">Quản trị viên</option>
+                    </select>
+                </div>
+
+                <!-- Ngày sinh -->
+                <div class="mb-3">
+                    <label class="form-label">Ngày sinh</label>
+                    <input type="date" name="dateOfBirth"
+                           th:value="${#dates.format(user.dateOfBirth, 'yyyy-MM-dd')}"
+                           class="form-control" />
+                </div>
+
+                <!-- Trạng thái -->
+                <div class="mb-3">
+                    <label class="form-label">Trạng thái hoạt động</label>
+                    <select name="active" class="form-select">
+                        <option value="true" th:selected="${user.active}">Đang hoạt động</option>
+                        <option value="false" th:selected="${!user.active}">Ngưng hoạt động</option>
+                    </select>
+                </div>
+
+                <!-- Avatar -->
+                <div class="mb-3">
+                    <label class="form-label">Cập nhật ảnh đại diện</label>
+                    <input type="file" class="form-control" name="avatar" />
+                    <div class="mt-2" th:if="${user.avatar != null}">
+                        <img th:src="@{${user.avatar}}" alt="Avatar hiện tại" width="100" class="rounded-circle" />
+                    </div>
+                </div>
+
+                <!-- Password mới -->
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu mới (nếu muốn đổi)</label>
+                    <input type="password" class="form-control" name="password" />
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Cập nhật</button>
+            </form>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

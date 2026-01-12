@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách Gói Tập Đã Mua</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+<div th:replace="base :: header"></div>
+
+<main class="container mt-4">
+    <h2 class="text-center mb-4">Danh sách Gói Tập của Người Dùng</h2>
+
+    <!-- Form lọc -->
+    <form th:action="@{/user-packages}" method="get">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <input type="text" name="userId" class="form-control" placeholder="ID người dùng" />
+            </div>
+            <div class="col-md-3 mb-3">
+                <input type="text" name="packageId" class="form-control" placeholder="ID gói tập" />
+            </div>
+            <div class="col-md-3 mb-3">
+                <select name="status" class="form-select">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    <option value="active">Đang hoạt động</option>
+                    <option value="expired">Hết hạn</option>
+                    <option value="pending">Chờ kích hoạt</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <input type="date" name="startDate" class="form-control" placeholder="Ngày bắt đầu" />
+            </div>
+        </div>
+        <div class="mb-2">
+            <button class="btn btn-info" type="submit">Lọc</button>
+            <a th:href="@{/user-packages/add-view}" class="btn btn-success">Thêm Gói Mới</a>
+        </div>
+    </form>
+
+    <!-- Bảng kết quả -->
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered table-striped text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Người dùng</th>
+                    <th>Gói tập</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="up : ${userPackages}">
+                    <td th:text="${up.id}"></td>
+                    <td th:text="${up.userId.fullName + ' (' + up.userId.username + ')'}"></td>
+                    <td th:text="${up.packageId.name}"></td>
+                    <td th:text="${#dates.format(up.startDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${#dates.format(up.endDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${up.status}"></td>
+                    <td>
+                        <a th:href="@{'/user-packages/edit/' + ${up.id}}" class="btn btn-sm btn-warning">Sửa</a>
+                        <button class="btn btn-sm btn-danger" th:onclick="'deleteUserPackage(\''+@{/api/user-packages/}+'\','+${up.id}+')'">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div th:replace="base :: footer"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
