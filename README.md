@@ -1,46 +1,156 @@
-# Gym Management System
+# 🏋️ Gym Management System
 
-Hệ thống quản lý phòng tập gym được xây dựng bằng Java Spring Boot (Backend) và ReactJS (Frontend), hỗ trợ quản lý hội viên, gói tập, huấn luyện viên, lịch tập, thanh toán và phân quyền người dùng.
+A full-stack gym management application designed to streamline membership management, training schedules, payments, and administrative operations.
 
-Công nghệ sử dụng:
-- Backend: Java, Spring Boot, Spring Security, JWT, Spring Data JPA, Hibernate
-- Frontend: ReactJS, Axios, React Router
-- Database: MySQL
+The project is built using **Spring Boot**, **ReactJS**, and **MySQL**, following a RESTful API architecture.
 
-Chức năng chính:
-- Quản lý hội viên, gói tập, huấn luyện viên
-- Đăng ký và theo dõi lịch tập
-- Quản lý thanh toán và hóa đơn
-- Đăng nhập và phân quyền (Admin / Staff / Member)
+---
 
-Cấu trúc project:
-- backend/: Spring Boot application
-- frontend/: ReactJS application
+## 🚀 Features
 
-Hướng dẫn chạy project:
+* Member management
+* Membership package management
+* Trainer management
+* Workout schedule tracking
+* Payment and invoice management
+* User authentication and authorization
+* Role-based access control (Admin, Staff, Member)
 
-Clone repository:
+---
+
+## 🛠 Tech Stack
+
+### Backend
+
+* Java
+* Spring Boot
+* Spring Security
+* JWT Authentication
+* Spring Data JPA
+* Hibernate
+
+### Frontend
+
+* ReactJS
+* Axios
+* React Router
+
+### Database
+
+* MySQL
+
+---
+
+## 📂 Project Structure
+
+```text
+GymAndHealthSystem/
+│
+├── backend/          # Spring Boot application
+│
+├── frontend/         # ReactJS application
+│
+└── README.md
+```
+
+---
+
+## ⚙️ Installation Guide
+
+### 1. Clone the Repository
+
+```bash
 git clone https://github.com/HipHoang/GymAndHealthSystem.git
 cd GymAndHealthSystem
+```
 
-Backend:
-Cấu hình database trong application.properties  
-spring.datasource.url=jdbc:mysql://localhost:8080/GymHealth/login  
-spring.datasource.username=root  
-spring.datasource.password=root
+---
 
-Chạy backend:
-cd backend  
-./mvnw spring-boot:run  
-Backend chạy tại http://localhost:8080/GymHealth/login
+### 2. Configure Database
 
-Frontend:
-cd frontend  
-npm install  
-npm start  
-Frontend chạy tại http://localhost:3000
+Update the database configuration in:
 
-License: MIT License
+```text
+backend/src/main/resources/application.properties
+```
 
-Author: Minh Hiep 
+Example:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/gym_management
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
+
+---
+
+### 3. Run the Backend
+
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+
+Or:
+
+```bash
+mvn spring-boot:run
+```
+
+Backend server:
+
+```text
+http://localhost:8080
+```
+
+---
+
+### 4. Run the Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Frontend server:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## 🔒 Security
+
+The application uses Spring Security and JWT Authentication to provide:
+
+* Secure login and registration
+* Protected API endpoints
+* Role-based authorization
+* Session-free authentication
+
+---
+
+## 📊 Core Modules
+
+* User Management
+* Membership Management
+* Trainer Management
+* Schedule Management
+* Payment Management
+* Administrative Dashboard
+
+---
+
+## 👨‍💻 Author
+
+**Hoang Minh Hiep**
+
 GitHub: https://github.com/HipHoang
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
